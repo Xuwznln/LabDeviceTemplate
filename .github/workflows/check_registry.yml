@@ -11,21 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Set up Micromamba
-        uses: mamba-org/setup-micromamba@v2
+      - name: Setup Miniforge (with mamba)
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          micromamba-version: latest
-          environment-name: unilab
-          create-args: >-
-            python=3.11
-            unilabos
-          condarc: |
-            channels:
-              - conda-forge
+          miniforge-version: latest
+          use-mamba: true
+          python-version: '3.11.14'
+          channels: conda-forge,robostack-staging,uni-lab,defaults
+          channel-priority: flexible
+          activate-environment: unilab
+          auto-update-conda: false
+
+      - name: Install unilabos
+        shell: bash -el {0}
+        run: |
+          mamba install -n unilab uni-lab::unilabos -c uni-lab -c robostack-staging -c conda-forge -y
 
       - name: Validate device registry
-        shell: micromamba-shell {0}
+        shell: bash -el {0}
         run: |
           unilab --check_mode --devices ./device_package_example --external_devices_only

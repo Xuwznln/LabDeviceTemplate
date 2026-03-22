@@ -58,8 +58,10 @@ class MyDevice:
 ### 4. 本地开发与测试
 
 ```bash
-# 安装 unilabos（推荐使用 mamba）
-mamba install unilabos -c conda-forge
+# 创建 conda 环境并安装 unilabos（需要 ROS2 完整环境）
+mamba create -n unilab python=3.11.14 -c conda-forge -y
+mamba activate unilab
+mamba install uni-lab::unilabos -c uni-lab -c robostack-staging -c conda-forge -y
 
 # 验证注册表（check mode，会自动检测并安装 requirements.txt 中的依赖）
 unilab --check_mode --devices ./device_package_example --external_devices_only
