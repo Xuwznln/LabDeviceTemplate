@@ -58,18 +58,17 @@ class MyDevice:
 ### 4. 本地开发与测试
 
 ```bash
-# 安装 unilabos
-pip install unilabos
+# 安装 unilabos（推荐使用 mamba）
+mamba install unilabos -c conda-forge
 
-# 安装你的设备包依赖
-pip install -r requirements.txt
-
-# 验证注册表（check mode）
-unilab --check_mode --devices ./device_package_example --external_devices_only --skip_env_check
+# 验证注册表（check mode，会自动检测并安装 requirements.txt 中的依赖）
+unilab --check_mode --devices ./device_package_example --external_devices_only
 
 # 启动服务（带实验图）
-unilab --devices ./device_package_example -g graph.json
+unilab --devices ./device_package_example --external_devices_only -g graph.json
 ```
+
+> **依赖自动安装**: unilabos 在启动时会自动检测 `--devices` 目录下的 `requirements.txt`，缺失的包会通过 `uv`（优先）或 `pip` 自动安装。
 
 ### 5. CI 验证
 
