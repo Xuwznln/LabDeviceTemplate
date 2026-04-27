@@ -19,8 +19,21 @@ console = Console()
     display_name="计数器",
 )
 class CountingDevice:
+    """示例计数设备，演示外部设备包的注册表写法。"""
 
-    def __init__(self, device_id: Optional[str] = None, config: Optional[Dict[str, Any]] = None, **kwargs):
+    def __init__(
+        self,
+        device_id: Optional[str] = None,
+        config: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ):
+        """
+        初始化计数设备。
+
+        Args:
+            device_id[设备ID]: 设备实例 ID，默认使用 example_counter。
+            config[设备配置]: 可包含 step，控制默认计数步长。
+        """
         self.device_id = device_id or "example_counter"
         self.config = config or {}
         self.logger = logging.getLogger(f"CountingDevice.{self.device_id}")
@@ -35,6 +48,12 @@ class CountingDevice:
 
     @action(description="增加计数")
     def increment(self, amount: int = 1) -> Dict[str, Any]:
+        """
+        增加计数。
+
+        Args:
+            amount[增加数量]: 本次要增加的计数值。
+        """
         self.data["count"] += amount
         self.data["status"] = "counting"
         self._print_status()
@@ -42,6 +61,12 @@ class CountingDevice:
 
     @action(description="减少计数")
     def decrement(self, amount: int = 1) -> Dict[str, Any]:
+        """
+        减少计数。
+
+        Args:
+            amount[减少数量]: 本次要减少的计数值。
+        """
         self.data["count"] -= amount
         self.data["status"] = "counting"
         self._print_status()
@@ -49,6 +74,7 @@ class CountingDevice:
 
     @action(description="重置计数器")
     def reset(self) -> Dict[str, Any]:
+        """重置计数器。"""
         self.data["count"] = 0
         self.data["status"] = "idle"
         return {"success": True, "count": 0}
